@@ -1,0 +1,26 @@
+.banner{
+    height:500px;
+    width:100%;
+    background-color: #2f9dff;
+}
+
+.nav{
+    background-color: black;
+    justify-content: center;
+}
+.navlink{
+    padding:10px;
+    text-decoration:none;
+}
+.navlink a{
+    text-decoration: none;
+    color:white;
+}
+.navlink.active a{
+    text-decoration: none;
+    color:white;
+    font-weight:bold;
+}
+.navlink:hover{
+    text-decoration:underline;
+}

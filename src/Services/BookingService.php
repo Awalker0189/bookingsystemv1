@@ -3,27 +3,43 @@
 namespace App\Services;
 
 use App\Models\Booking;
+use PDO;
 
 class BookingService
 {
-    private array $bookings = [];
+    protected PDO $db;
 
-    public function __construct()
+    public function __construct(PDO $pdo)
     {
-        // Add a default booking
-        $this->bookings[] = new Booking(1, 'Test Booking');
+        $this->db = $pdo; // assign PDO passed from controller
+        $this->createTableIfNotExists();
+    }
+
+    protected function createTableIfNotExists()
+    {
+        $sql = "CREATE TABLE IF NOT EXISTS bookings (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL
+        )";
+        $this->db->exec($sql);
     }
 
     public function listBookings(): array
     {
-        return $this->bookings;
+        $stmt = $this->db->query("SELECT * FROM bookings");
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $bookings = [];
+        foreach ($rows as $row) {
+            $bookings[] = new Booking($row['id'], $row['name']);
+        }
+        return $bookings;
     }
 
     public function addBooking(string $name): Booking
     {
-        $id = count($this->bookings) + 1;
-        $booking = new Booking($id, $name);
-        $this->bookings[] = $booking;
-        return $booking;
+        $stmt = $this->db->prepare("INSERT INTO bookings (name) VALUES (:name)");
+        $stmt->execute(['name' => $name]);
+        $id = $this->db->lastInsertId();
+        return new Booking((int)$id, $name);
     }
 }
