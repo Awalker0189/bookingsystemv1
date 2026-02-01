@@ -20,7 +20,7 @@ class BookingController
     public function index(Request $request, Response $response, $args)
     {
         $response->getBody()->write(
-            View::render('home', [])
+            view::render('home', ['bodyid' => 'home'])
         );
         return $response;
     }
@@ -29,7 +29,15 @@ class BookingController
     {
         $bookings = $this->service->listBookings();
         $response->getBody()->write(
-            View::render('bookings', ['bookings' => $bookings])
+            View::render('cms/bookings', ['bookings' => $bookings, 'bodyid' => 'booking'])
+        );
+        return $response;
+    }
+    public function view(Request $request, Response $response, $args)
+    {
+        $booking = $this->service->listBookings();
+        $response->getBody()->write(
+            View::render('cms/bookings', ['bookings' => $bookings, 'bodyid' => 'booking'])
         );
         return $response;
     }
@@ -40,5 +48,8 @@ class BookingController
         $booking = $this->service->addBooking($name);
         $response->getBody()->write("Created booking: {$booking->id} - {$booking->name}");
         return $response;
+    }
+    public function getDates(Request $request, Response $response, $args){
+
     }
 }

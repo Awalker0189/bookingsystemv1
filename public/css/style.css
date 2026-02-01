@@ -1,12 +1,89 @@
+.logo{
+    width:auto;
+    height:auto;
+    max-height:125px;
+}
+.center{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+.widebtn{
+    margin:10px 0px;
+    width: 100%;
+}
+.bwidth{
+    width:80%;
+    margin:auto;
+}
+.backbtn{
+    text-decoration:none;
+    color:black;
+    font-weight:600;
+}
+.accountbtns{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+#home .accountbtns .btn{
+    color:white;
+}
 .banner{
-    height:500px;
+    /*height:700px;*/
     width:100%;
     background-color: #2f9dff;
+    overflow:hidden;
+    position:relative;
+    top:0px;
+    /*margin-top:-250px;*/
 }
-
+.banner a{
+    text-decoration:none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.banner a h1{
+    text-decoration:none;
+    color:black;
+    font-weight:700;
+    font-size: 80px;
+    text-shadow: 2px 2px 20px #ff7a7a;
+}
+.banner img{
+    width: 100%;        /* fill container width */
+    height: 100%;       /* fill container height */
+    object-fit: cover;  /* scale image to cover container */
+    object-position: center top; /* position inside container */
+}
+#home .header{
+    background-color: rgba(0, 0, 0, 0.4);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    position:fixed;
+    top:0px;
+    z-index:1;
+    width:100%;
+}
+#home .navlink a{
+    text-decoration: none;
+    color:white;
+}
+.navcont{
+    width:100%;
+    left:0px;
+    color:black;
+    border-top:1px solid black;
+    border-bottom:1px solid black;
+}
 .nav{
-    background-color: black;
     justify-content: center;
+    left:0px;
 }
 .navlink{
     padding:10px;
@@ -14,13 +91,32 @@
 }
 .navlink a{
     text-decoration: none;
-    color:white;
+    color: #000000;
 }
 .navlink.active a{
     text-decoration: none;
-    color:white;
     font-weight:bold;
 }
 .navlink:hover{
     text-decoration:underline;
+}
+
+.cta{
+    text-align:center;
+    background-color:#80808038;
+    border-bottom:1px solid black;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+.owl-carousel .owl-item {
+    padding: 5px 0px;
+}
+label{
+    padding:5px 0px;
+}
+.greytext{
+    color: #979797;
+}
+.userstable {
+    width: 100%;
 }

@@ -35,6 +35,13 @@ class BookingService
         return $bookings;
     }
 
+    public function getBooking($id = 0){
+        $sql = $this->db->query("SELECT * FROM bookings WHERE id = :id");
+        $restult = $sql->fetch(PDO::FETCH_ASSOC);
+        $booking = new Booking($restult['id'], $restult['name']);
+        return $booking;
+    }
+
     public function addBooking(string $name): Booking
     {
         $stmt = $this->db->prepare("INSERT INTO bookings (name) VALUES (:name)");

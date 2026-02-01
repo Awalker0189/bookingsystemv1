@@ -6,6 +6,7 @@ class view
 {
     public static function render(string $view, array $data = []): string
     {
+        global $config;
         extract($data);
 
         ob_start();
