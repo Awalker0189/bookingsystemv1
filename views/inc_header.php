@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row accountbtns">
             <div class="col-lg-2">
-                <img class="logo" src="/images/logot.png" alt="logo">
+                <a href="/"><img class="logo" src="/images/barberlogo.png" alt="logo"></a>
             </div>
             <div class="col-lg-8"></div>
             <div class="col-lg-2">

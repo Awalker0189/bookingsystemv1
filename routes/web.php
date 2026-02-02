@@ -21,5 +21,6 @@ return function (App $app, PDO $pdo) {
     $app->get('/users', [$usersController, 'list']);
     $app->get('/usered/{id}', [$usersController, 'view']);
     $app->post('/usered/{id}', [$usersController, 'updateUser']);
+    $app->post('/ajax/workingdays', [$bookingController, 'updateWorkingDays']);
 
 };

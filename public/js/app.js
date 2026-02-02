@@ -12,4 +12,29 @@ $(document).ready(function(){
             1000: { items: 3 }
         }
     });
+    $(".barberdates td").on("click", function(){
+        var date = $(this).data('date');
+        const $checkbox = $(`input[type="checkbox"][value="${date}"]`);
+        if ($checkbox.is(':checked')) {
+            $checkbox.prop('checked', false);
+            $(this).removeClass("selected");
+        } else {
+            $checkbox.prop('checked', true);
+            $(this).addClass("selected");
+        }
+
+        const form = document.getElementById('workingdays');
+        const formData = new FormData(form);
+        $.ajax({
+            url: "/ajax/workingdays",
+            method: "POST",
+            data: formData,
+            processData: false, // REQUIRED for FormData
+            contentType: false, // REQUIRED for FormData
+            success: function (result) {
+                $("#div1").html(result);
+            }
+        });
+    });
 });
+console.log("here");

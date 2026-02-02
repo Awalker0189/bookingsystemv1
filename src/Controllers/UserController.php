@@ -31,7 +31,7 @@ class UserController
         $post = $request->getParsedBody();
         if(!isset($post['username']) || empty($post['username'])){
             $response->getBody()->write(
-                View::render('cms/login', ['bodyid' => $this->bodyid])
+                View::render('/login', ['bodyid' => $this->bodyid])
             );
             return $response;
         } else {

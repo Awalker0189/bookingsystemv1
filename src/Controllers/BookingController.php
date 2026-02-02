@@ -49,7 +49,9 @@ class BookingController
         $response->getBody()->write("Created booking: {$booking->id} - {$booking->name}");
         return $response;
     }
-    public function getDates(Request $request, Response $response, $args){
-
+    public function updateWorkingDays(Request $request, Response $response, $args){
+        echo '<pre>';
+        print_r($request);
+        echo '</pre>'; die();
     }
 }
