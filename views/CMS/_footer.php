@@ -1,8 +1,3 @@
-<?php
-if(isset($_SESSION['userid'])){
-    echo '<div class="stickyright"><a href="/cms">Return to CMS</a></div>';
-}
-?>
 </body>
 <script src="/js/jquery.js"></script>
 <script src="/js/owlcarousel/owl.carousel.min.js"></script>

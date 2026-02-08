@@ -21,32 +21,38 @@ class UserController
     {
         $users = $this->userService->listUsers();
         $response->getBody()->write(
-            View::render('cms/users', ['users' => $users, 'bodyid' => $this->bodyid])
+            View::render('cms/users', ['users' => $users, 'bodyid' => $this->bodyid], true)
         );
         return $response;
     }
-
     public function login(Request $request, Response $response, $args)
     {
         $post = $request->getParsedBody();
         if(!isset($post['username']) || empty($post['username'])){
-            $response->getBody()->write(
-                View::render('/login', ['bodyid' => $this->bodyid])
-            );
+            include __DIR__ . '/../../views/cms/login.php';
+            $html = ob_get_clean();
+            $response->getBody()->write($html);
             return $response;
         } else {
-             if($this->userService->loginUser($post)){
-                return $response->withStatus(302)->withHeader('Location', '/');
-             } else{
-                 return $response->withHeader('Location', '/login')->withStatus(302);
-             }
+            if($this->userService->loginUser($post)){
+                return $response->withStatus(302)->withHeader('Location', '/cms/');
+            } else{
+                include __DIR__ . '/../../views/cms/login.php';
+                $html = ob_get_clean();
+                $response->getBody()->write($html);
+                return $response;
+            }
 //
         }
     }
 
     public function logout(Request $request, Response $response)
     {
-        session_destroy();
+        unset($_SESSION['userid']);
+        unset($_SESSION['fname']);
+        unset($_SESSION['lname']);
+        unset($_SESSION['email']);
+        unset($_SESSION['role']);
         return $response->withHeader('Location', '/login')->withStatus(302);
 
     }
@@ -62,12 +68,12 @@ class UserController
         }
         if(!isset($post['username']) || empty($post['username'])){
             $response->getBody()->write(
-                View::render('cms/register', ['bodyid' => $this->bodyid])
+                View::render('/register', ['bodyid' => $this->bodyid])
             );
             return $response;
         } else {
             if($this->userService->createUser($post)){
-                return $response->withStatus(302)->withHeader('Location', '/');
+                return $response->withStatus(302)->withHeader('Location', '/login');
             } else{
                 return $response->withHeader('Location', '/register')->withStatus(302);
             }
@@ -82,7 +88,7 @@ class UserController
         } else {
             $userData = $this->userService->getUser($args['id']);
             $response->getBody()->write(
-                View::render('cms/usered', ['user' => $userData['user'],'dates' => $userData['dates'], 'bodyid' => $this->bodyid])
+                View::render('cms/usered', ['user' => $userData['user'],'dates' => $userData['dates'], 'bodyid' => $this->bodyid], true)
             );
             return $response;
         }

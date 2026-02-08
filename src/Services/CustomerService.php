@@ -2,8 +2,8 @@
 
 namespace App\Services;
 use PDO;
-use App\Models\User;
-class UserService
+use App\Models\Customer;
+class CustomerService
 {
     protected PDO $db;
 
@@ -12,21 +12,33 @@ class UserService
         $this->db = $pdo; // assign PDO passed from controller
     }
 
-    public function listUsers(): array
+    public function listCustomers($request): array
     {
-        $stmt = $this->db->query("SELECT * FROM users");
+        $post = $request->getParsedBody();
+        $keywordsql = '';
+        if($post['keyword'] != ''){
+            $keywordsql = 'AND (firstname LIKE :keyword OR lastname LIKE :keyword OR email = :keyword)';
+        }
+        $sql = "SELECT * FROM customer_accounts WHERE 1=1 $keywordsql";
+        $stmt = $this->db->prepare($sql);
+        $keyword = '%'.$post['keyword'].'%';
+        if(isset($post['keyword']) && !empty($post['keyword']) != ''){
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+        }
+        $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $users = [];
         foreach ($rows as $row) {
-            $users[] = new User($row['userid'], $row['firstname'] ?? '', $row['lastname'] ?? '', $row['created'] ?? '', $row['role'] ?? '', $row['lastupdated'] ?? '');
+            $users[] = new Customer($row['customerid'], $row['firstname'] ?? '', $row['lastname'] ?? '', $row['created'] ?? '', $row['active'] ?? '', $row['lastupdated'] ?? '');
         }
         return $users;
+//        $stmt = $this->db->query("SELECT * FROM customer_accounts WHERE 1=1 $keywordsql");
     }
 
-    public function createUser(array $post){
+    public function createCustomer(array $post){
         $hashedPassword = password_hash($post['password'], PASSWORD_DEFAULT);
-        $sql = "INSERT INTO customer_accounts (username, password, firstname, lastname, role, created, email)
-        VALUES (:username, :password, :firstname, :lastname, 'staff', NOW(), :email)";
+        $sql = "INSERT INTO customer_accounts (username, password, firstname, lastname, created, email)
+        VALUES (:username, :password, :firstname, :lastname, NOW(), :email)";
 
         $stmt = $this->db->prepare($sql);
 
@@ -39,28 +51,28 @@ class UserService
         $stmt->execute();
     }
 
-    public function getUser($id = 0){
+    public function getCustomer($id = 0){
         $stmt = $this->db->prepare("SELECT * FROM users WHERE userid = :userid");
         $stmt->bindParam(':userid', $id, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $user = new User(
-                    $result['userid'],
-                    $result['firstname'],
-                    $result['lastname'],
-                    $result['created'] ?? '',
-                    $result['role'] ?? '',
-                    $result['lastupdated'] ?? date('d/m/y H:i'),
-                    $result['username'] ?? '');
+        $user = new Customer(
+            $result['userid'],
+            $result['firstname'],
+            $result['lastname'],
+            $result['created'] ?? '',
+            $result['role'] ?? '',
+            $result['lastupdated'] ?? date('d/m/y H:i'),
+            $result['username'] ?? '');
 
 //        if($user->role == 'barber'){
-            $dates = '';
+        $dates = '';
 //        }
         return ['user' => $user,
-                'dates' => $dates];
+            'dates' => $dates];
     }
-    public function updateUser($post, $id = 0){
+    public function updateCustomer($post, $id = 0){
 
         // Use prepared statements instead of escape_string
         $sql = "UPDATE users 
@@ -82,27 +94,6 @@ class UserService
         return $stmt->execute();
     }
 
-    public function loginUser($post){
-
-        $hash = password_hash($post['password'], PASSWORD_DEFAULT);
-
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE username = :username");
-        $stmt->bindParam(':username', $post['username'], PDO::PARAM_STR);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($post['password'], $user['password'])) {
-            $_SESSION['userid'] = $user['userid'];
-            $_SESSION['fname'] = $user['firstname'];
-            $_SESSION['lname'] = $user['lastname'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['role'] = $user['role'];
-            return true;
-        } else {
-            return false;
-        }
-
-    }
     public function loginCustomer($post){
 
         $hash = password_hash($post['password'], PASSWORD_DEFAULT);

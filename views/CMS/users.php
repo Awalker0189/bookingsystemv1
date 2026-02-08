@@ -9,7 +9,7 @@
         </tr>
         <?php foreach ($users as $user): ?>
             <tr>
-                <td><a href="/usered/<?= $user->userid ?>">Edit</a></td>
+                <td><a href="/cms/usered/<?= $user->userid ?>">Edit</a></td>
                 <td> <?= htmlspecialchars($user->firstname) ?></td>
                 <td> <?= htmlspecialchars($user->lastname) ?></td>
                 <td> <?= htmlspecialchars($user->role) ?></td>

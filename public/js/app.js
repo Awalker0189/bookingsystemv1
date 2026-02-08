@@ -12,7 +12,7 @@ $(document).ready(function(){
             1000: { items: 3 }
         }
     });
-    $(".barberdates td").on("click", function(){
+    $(document).on("click", ".barberdates td:not(.disabled)", function() {
         var date = $(this).data('date');
         const $checkbox = $(`input[type="checkbox"][value="${date}"]`);
         if ($checkbox.is(':checked')) {
@@ -26,7 +26,7 @@ $(document).ready(function(){
         const form = document.getElementById('workingdays');
         const formData = new FormData(form);
         $.ajax({
-            url: "/ajax/workingdays",
+            url: "/cms/ajax/workingdays",
             method: "POST",
             data: formData,
             processData: false, // REQUIRED for FormData
@@ -36,5 +36,20 @@ $(document).ready(function(){
             }
         });
     });
+    $(document).on("click", "#nextmonth, #previousmonth", function() {
+        var select = $(this).data('month');
+        var current = $(this).data('current');
+        $.ajax({
+            url: "/cms/ajax/monthselect",
+            method: "POST",
+            datatype: "json",
+            data: {
+                month: select,
+                current: current
+            },
+            success: function (result) {
+                $(".calendar").html(result);
+            }
+        });
+    });
 });
-console.log("here");

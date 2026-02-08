@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 class view
 {
-    public static function render(string $view, array $data = []): string
+    public static function render(string $view, array $data = [], $cms = false): string
     {
         global $config;
         extract($data);
@@ -14,7 +14,11 @@ class view
         $content = ob_get_clean();
 
         ob_start();
-        include __DIR__ . "/../../views/layout.php";
+        if($cms){
+            include __DIR__ . "/../../views/cms/cmslayout.php";
+        } else {
+            include __DIR__ . "/../../views/layout.php";
+        }
         return ob_get_clean();
     }
 }
